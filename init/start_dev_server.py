@@ -2,18 +2,18 @@ import bpy
 import os
 import subprocess
 
-# from .. B2DREI_Globals import get_scene_path, get_project_root, get_project_name
+from .. B2REACT_Globals import get_scene_path, get_project_root, get_project_name
 
 
-class B2DREI_OT_StartDevServer(bpy.types.Operator):
+class B2REACT_OT_StartDevServer(bpy.types.Operator):
 
     bl_label = "Start Dev Server"
-    bl_idname = "Blender2R3F.start_dev_server"
+    bl_idname = "blender2react.start_dev_server"
 
     bl_description = "Starts the dev server for the current R3F Project"
     bl_options = {"REGISTER"}
 
-    bl_category = "Blender2R3F"
+    bl_category = "Blender2React"
 
     def execute(self, context):
         print('_______________________________________________________')

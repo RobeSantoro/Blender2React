@@ -1,18 +1,18 @@
 import os
 import bpy
 
-# from .. B2DREI_Globals import get_project_root, get_project_name
+from .. B2REACT_Globals import get_project_root, get_project_name
 
 
-class B2DREI_OT_Open_Project_in_Explorer(bpy.types.Operator):
+class B2REACT_OT_open_project_folder(bpy.types.Operator):
     """Opens the current R3F Project in Explorer"""
 
-    bl_idname = "Blender2R3F.open_project_folder"
+    bl_idname = "blender2react.open_project_folder"
     bl_label = "Open Project in Explorer"
 
     bl_description = "Opens the current R3F Project in Explorer"
     bl_options = {"REGISTER"}
-    bl_category = "Blender2R3F"
+    bl_category = "Blender2React"
 
     @classmethod
     def poll(cls, context):

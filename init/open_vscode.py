@@ -1,18 +1,18 @@
 import os
 import bpy
 
-# from .. B2DREI_Globals import get_project_root, get_project_name
+from .. B2REACT_Globals import get_project_root, get_project_name
 
 
-class B2DREI_OT_Open_Project_in_VSCode(bpy.types.Operator):
+class B2REACT_OT_Open_Project_in_VSCode(bpy.types.Operator):
     """Opens the current R3F Project in VSCode"""
 
-    bl_idname = "Blender2R3F.open_project_in_vscode"
-    bl_label = "Open Project in VSCode"
+    bl_idname = "blender2react.open_project_in_vscode"
+    bl_label = "Open Project in VS Code"
 
-    bl_description = "Opens the current R3F Project in VSCode"
+    bl_description = "Opens the current R3F Project in VS Code"
     bl_options = {"REGISTER"}
-    bl_category = "Blender2R3F"
+    bl_category = "Blender2React"
 
     @classmethod
     def poll(cls, context):
