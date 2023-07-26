@@ -76,4 +76,9 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
         return {"FINISHED"}
 
     def invoke(self, context, event):
-        return context.window_manager.invoke_confirm(self, event)
+        return context.window_manager.invoke_props_dialog(self)
+    
+    def draw(self, context):
+        row = self.layout
+        row.prop(context.scene.Blender2React, "R3F_Project_Root", text="Project Root")
+        row.prop(context.scene.Blender2React, "R3F_Project_Name", text="Project Name")
