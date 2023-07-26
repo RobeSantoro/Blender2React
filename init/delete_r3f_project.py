@@ -11,8 +11,8 @@ def remove_readonly(fn, path, excinfo):
 
     try:
         os.chmod(path, stat.S_IWRITE)
+        print('Removed read only file:', path)
         fn(path)
-        print('Deleting Project Files')
 
     except Exception as exc:
         bpy.context.window_manager.popup_menu(
@@ -27,7 +27,7 @@ class B2REACT_OT_Delete_R3F_Project(bpy.types.Operator):
     """Delete the R3F Project and reset the Blender2React Addon"""
 
     bl_idname = "blender2react.delete_r3f_project"
-    bl_label = "Resetting Blender2React will DEELTE the project folder."
+    bl_label = "DELETE the project folder and RESET globals?"
 
     bl_description = "Delete the R3F Project and reset the Blender2React Addon"
     bl_options = {"REGISTER"}

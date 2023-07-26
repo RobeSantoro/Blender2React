@@ -14,8 +14,9 @@ from . init.reset_git import B2REACT_OT_Reset_Git
 from . init.open_vscode import B2REACT_OT_Open_Project_in_VSCode
 from . init.open_folder import B2REACT_OT_open_project_folder
 from . init.start_dev_server import B2REACT_OT_StartDevServer
+from . init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
 
-from .init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
+from . init.update_title import B2REACT_OT_Update_Title
 
 # # Utilities
 # from . utils.pushdown_actions import B2REACT_OT_PushDownActons
@@ -30,7 +31,7 @@ from .init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
 bl_info = {
     "name": "Blender 2 React",
     "author": "Robe Santoro",
-    "description": "Work in Progress",
+    "description": "Bring a Blender project to React Three Fiber",
     "blender": (3, 6, 0),
     "version": (0, 0, 1),
     "location": "View3D > UI > Blender 2 React",
@@ -56,8 +57,9 @@ def register():
     bpy.utils.register_class(B2REACT_OT_Open_Project_in_VSCode)
     bpy.utils.register_class(B2REACT_OT_open_project_folder)
     bpy.utils.register_class(B2REACT_OT_StartDevServer)
-
     bpy.utils.register_class(B2REACT_OT_Delete_R3F_Project)
+
+    bpy.utils.register_class(B2REACT_OT_Update_Title)
 
     # bpy.utils.register_class(B2REACT_OT_PushDownActons)
     # bpy.utils.register_class(R3F_OT_RenameTracks)
@@ -81,8 +83,9 @@ def unregister():
     bpy.utils.unregister_class(B2REACT_OT_Open_Project_in_VSCode)
     bpy.utils.unregister_class(B2REACT_OT_open_project_folder)
     bpy.utils.unregister_class(B2REACT_OT_StartDevServer)
-
     bpy.utils.unregister_class(B2REACT_OT_Delete_R3F_Project)
+
+    bpy.utils.unregister_class(B2REACT_OT_Update_Title)
 
     # bpy.utils.unregister_class(B2REACT_OT_PushDownActons)
     # bpy.utils.unregister_class(R3F_OT_RenameTracks)
