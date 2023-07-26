@@ -113,4 +113,4 @@ class B2REACT_PT_Export_Panel(bpy.types.Panel):
         row1.operator("Blender2React.exportall_glb", text="Export All Collections")
 
         row2 = layout.row(align=True)
-        row2.operator("Blender2React.exportselected_glb", text="Export Active Collection")
+        row2.operator("Blender2React.export_active_glb", text="Export Active Collection")

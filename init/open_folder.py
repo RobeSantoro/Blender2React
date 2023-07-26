@@ -19,15 +19,19 @@ class B2REACT_OT_open_project_folder(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        project_location = get_project_root() + get_project_name()
+        print('_______________________________________________________')
+        print("Opening Project Folder... Project Location:")
 
-        print("project_location:", project_location)
+        project_location = os.path.join(get_project_root(), get_project_name())
 
-        cmd = 'explorer.exe ' + project_location
+        print(project_location)
+
+        cmd = f'explorer.exe "{project_location}"'
 
         if project_location != "":
             os.system(cmd)
         else:
             self.report({"ERROR"}, "No Project Path set")
 
+        print('_______________________________________________________')
         return {"FINISHED"}

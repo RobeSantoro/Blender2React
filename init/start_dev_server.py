@@ -18,21 +18,13 @@ class B2REACT_OT_StartDevServer(bpy.types.Operator):
     def execute(self, context):
         print('_______________________________________________________')
         print("Starting Dev Server...")
-        print('-------------------------------------------------------')
 
-        project_location = get_project_root() + "\\" + get_project_name()
+        project_location = os.path.join(get_project_root(), get_project_name())
 
         os.chdir(project_location)
-
-        # Launch gltfjsx command to compress the GLB file
-        # and delete the Animation.jsx and animation.glb files
         cmd = f"cd {project_location} && npm run dev"
-
         p = subprocess.Popen(["start", "cmd", "/k", f"{cmd}"], shell=True)
         p.wait()
 
-        # Open the browser to the localhost
-        # cmd = f"start chrome http://127.0.0.1:5173/"
-        # os.system(cmd)
-
+        print('_______________________________________________________')
         return {'FINISHED'}

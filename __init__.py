@@ -6,7 +6,7 @@ from . B2REACT_Globals import B2REACT_Globals
 from . B2REACT_UI import B2REACT_PT_Init_Panel
 # from . B2REACT_UI import B2REACT_PT_Edit_Panel
 # from . B2REACT_UI import B2REACT_PT_Utils_Panel
-# from . B2REACT_UI import B2REACT_PT_Export_Panel
+from . B2REACT_UI import B2REACT_PT_Export_Panel
 
 # Initialization
 from . init.create_r3f_project import B2REACT_OT_Create_R3F_Project
@@ -25,7 +25,7 @@ from . init.update_title import B2REACT_OT_Update_Title
 
 # # Export
 # from . export.export_all_glb import R3F_OT_ExportAll_GLB
-# from . export.export_active_glb import R3F_OT_ExportActive_GLB
+from . export.export_active_glb import B2REACT_OT_Export_Active_GLB
 
 
 bl_info = {
@@ -49,7 +49,7 @@ def register():
     bpy.utils.register_class(B2REACT_PT_Init_Panel)
     # bpy.utils.register_class(B2REACT_PT_Edit_Panel)
     # bpy.utils.register_class(B2REACT_PT_Utils_Panel)
-    # bpy.utils.register_class(B2REACT_PT_Export_Panel)
+    bpy.utils.register_class(B2REACT_PT_Export_Panel)
 
     # Register Init Operators
     bpy.utils.register_class(B2REACT_OT_Create_R3F_Project)
@@ -66,7 +66,7 @@ def register():
     # bpy.utils.register_class(R3F_OT_RenameGeo)
 
     # bpy.utils.register_class(R3F_OT_ExportAll_GLB)
-    # bpy.utils.register_class(R3F_OT_ExportActive_GLB)
+    bpy.utils.register_class(B2REACT_OT_Export_Active_GLB)
 
 
 def unregister():
@@ -92,7 +92,7 @@ def unregister():
     # bpy.utils.unregister_class(R3F_OT_RenameGeo)
 
     # bpy.utils.unregister_class(R3F_OT_ExportAll_GLB)
-    # bpy.utils.unregister_class(R3F_OT_ExportActive_GLB)
+    bpy.utils.unregister_class(B2REACT_OT_Export_Active_GLB)
 
     # Unregister Globals
     bpy.utils.unregister_class(B2REACT_Globals)
