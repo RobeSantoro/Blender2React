@@ -19,15 +19,21 @@ class B2REACT_OT_Open_Project_in_VSCode(bpy.types.Operator):
         return True
 
     def execute(self, context):
-        project_location = get_project_root() + "\\" + get_project_name()
+
+        R3F_Project_Root = get_project_root()
+        R3F_Project_Name = get_project_name()
+        
+        project_location = os.path.join(R3F_Project_Root, R3F_Project_Name)
 
         print("project_location:", project_location)
 
-        cmd = 'code ' + project_location
-
-        if project_location != "":
-            os.system(cmd)
+        if project_location:
+            self.report({"INFO"}, "Opening VS Code")
+            print("Opening VS Code")
+            cmd = f'code "{project_location}"'
+            os.system(cmd)            
         else:
             self.report({"ERROR"}, "No Project Path set")
+            print("No Project Path set")
 
         return {"FINISHED"}

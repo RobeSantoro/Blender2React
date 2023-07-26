@@ -38,9 +38,9 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
     """Creates a R3F Project in a folder next to the current blender file if no path is given"""
 
     bl_idname = "blender2react.create_r3f_project"
-    bl_label = "Create R3F Project next to the current blender file?"
+    bl_label = "Create R3F Project"
 
-    bl_description = "Creates a R3F Project in a folder next to the current blender file"
+    bl_description = "Creates a R3F Project  next to the current blender file"
     bl_options = {"REGISTER"}
     bl_category = "Blender2React"
 
@@ -50,17 +50,19 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
 
     def execute(self, context):
 
+        # Check if the Blender Scene has been saved
         Scene_Path = get_scene_path()
         if Scene_Path is None:
             return {"CANCELLED"}
 
+        # Get R3F Project Root and Name from the UI
         R3F_Project_Root = get_project_root()
         R3F_Project_Name = get_project_name()
 
-        if R3F_Project_Root == "":
-            print("No R3F Project Path given")
-            self.report({"ERROR"}, "No R3F Project Path given")
-            return {"CANCELLED"}
+        # If Blender relative path is "//", set it to the absolute path
+        if R3F_Project_Root.startswith("//"):
+            R3F_Project_Root = bpy.path.abspath(R3F_Project_Root)
+            bpy.context.scene.Blender2React.R3F_Project_Root = R3F_Project_Root
 
         # Create R3F Project
         create_r3f_project(R3F_Project_Root, R3F_Project_Name)
@@ -82,3 +84,4 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
         row = self.layout
         row.prop(context.scene.Blender2React, "R3F_Project_Root", text="Project Root")
         row.prop(context.scene.Blender2React, "R3F_Project_Name", text="Project Name")
+        row.label(text="If no path is given, will create a 'r3f-project' folder next to the blender file")
