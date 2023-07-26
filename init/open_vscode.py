@@ -8,7 +8,7 @@ class B2REACT_OT_Open_Project_in_VSCode(bpy.types.Operator):
     """Opens the current R3F Project in VSCode"""
 
     bl_idname = "blender2react.open_project_in_vscode"
-    bl_label = "Open Project in VS Code"
+    bl_label = "Open VS Code"
 
     bl_description = "Opens the current R3F Project in VS Code"
     bl_options = {"REGISTER"}

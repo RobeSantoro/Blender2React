@@ -12,7 +12,7 @@ def get_scene_path():
         bpy.context.window_manager.popup_menu(
             lambda self, context:
                 self.layout.label(text="Scene Path not found. Save Blender file first."),
-                title="Save Blender File",
+                title="Save Blender File first!",
                 icon='ERROR')
 
         return None
@@ -83,8 +83,8 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         maxlen=1024,
     )
 
-    Initialized: bpy.props.BoolProperty(
-        name="Initialized",
+    R3F_Initialized: bpy.props.BoolProperty(
+        name="R3F_Initialized",
         description="Is the R3F Project Initialized",
         default=False,
     )

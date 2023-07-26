@@ -8,7 +8,7 @@ class B2REACT_OT_open_project_folder(bpy.types.Operator):
     """Opens the current R3F Project in Explorer"""
 
     bl_idname = "blender2react.open_project_folder"
-    bl_label = "Open Project in Explorer"
+    bl_label = "Open Explorer"
 
     bl_description = "Opens the current R3F Project in Explorer"
     bl_options = {"REGISTER"}
