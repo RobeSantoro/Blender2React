@@ -10,12 +10,12 @@ from . B2REACT_UI import B2REACT_PT_Init_Panel
 
 # Initialization
 from . init.create_r3f_project import B2REACT_OT_Create_R3F_Project
-from . init.start_dev_server import B2REACT_OT_StartDevServer
+from . init.reset_git import B2REACT_OT_Reset_Git
 from . init.open_vscode import B2REACT_OT_Open_Project_in_VSCode
 from . init.open_folder import B2REACT_OT_open_project_folder
+from . init.start_dev_server import B2REACT_OT_StartDevServer
 
-# # Edit React Template
-# from . edit.edit_template import B2REACT_OT_Edit_Template
+from .init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
 
 # # Utilities
 # from . utils.pushdown_actions import B2REACT_OT_PushDownActons
@@ -40,20 +40,24 @@ bl_info = {
 
 def register():
 
+    # Register Globals
     bpy.utils.register_class(B2REACT_Globals)
     bpy.types.Scene.Blender2React = bpy.props.PointerProperty(type=B2REACT_Globals)
 
+    # Register Panels UI
     bpy.utils.register_class(B2REACT_PT_Init_Panel)
     # bpy.utils.register_class(B2REACT_PT_Edit_Panel)
     # bpy.utils.register_class(B2REACT_PT_Utils_Panel)
     # bpy.utils.register_class(B2REACT_PT_Export_Panel)
 
+    # Register Init Operators
     bpy.utils.register_class(B2REACT_OT_Create_R3F_Project)
-    bpy.utils.register_class(B2REACT_OT_StartDevServer)
+    bpy.utils.register_class(B2REACT_OT_Reset_Git)
     bpy.utils.register_class(B2REACT_OT_Open_Project_in_VSCode)
     bpy.utils.register_class(B2REACT_OT_open_project_folder)
+    bpy.utils.register_class(B2REACT_OT_StartDevServer)
 
-    # bpy.utils.register_class(B2REACT_OT_Edit_Template)
+    bpy.utils.register_class(B2REACT_OT_Delete_R3F_Project)
 
     # bpy.utils.register_class(B2REACT_OT_PushDownActons)
     # bpy.utils.register_class(R3F_OT_RenameTracks)
@@ -65,17 +69,20 @@ def register():
 
 def unregister():
 
+    # Unregister Panels UI
     bpy.utils.unregister_class(B2REACT_PT_Init_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Edit_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Utils_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Export_Panel)
 
+    # Unregister Init Operators
     bpy.utils.unregister_class(B2REACT_OT_Create_R3F_Project)
-    bpy.utils.unregister_class(B2REACT_OT_StartDevServer)
+    bpy.utils.unregister_class(B2REACT_OT_Reset_Git)
     bpy.utils.unregister_class(B2REACT_OT_Open_Project_in_VSCode)
     bpy.utils.unregister_class(B2REACT_OT_open_project_folder)
+    bpy.utils.unregister_class(B2REACT_OT_StartDevServer)
 
-    # bpy.utils.unregister_class(B2REACT_OT_Edit_Template)
+    bpy.utils.unregister_class(B2REACT_OT_Delete_R3F_Project)
 
     # bpy.utils.unregister_class(B2REACT_OT_PushDownActons)
     # bpy.utils.unregister_class(R3F_OT_RenameTracks)
@@ -84,6 +91,7 @@ def unregister():
     # bpy.utils.unregister_class(R3F_OT_ExportAll_GLB)
     # bpy.utils.unregister_class(R3F_OT_ExportActive_GLB)
 
+    # Unregister Globals
     bpy.utils.unregister_class(B2REACT_Globals)
     del bpy.types.Scene.Blender2React
 

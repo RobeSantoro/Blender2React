@@ -15,6 +15,7 @@ class B2REACT_PT_Init_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
+        layout.operator_context = 'INVOKE_DEFAULT'
 
         col1 = layout.column(align=True, heading="Project_Root")
         col1.prop(context.scene.Blender2React, "R3F_Project_Root", text="")
@@ -23,20 +24,28 @@ class B2REACT_PT_Init_Panel(bpy.types.Panel):
         col2.prop(context.scene.Blender2React, "R3F_Project_Name", text="")
 
         # INIT OPERATOR
-        row0 = layout.row(align=True)
-        row0.operator("Blender2React.create_r3f_project", text="Init React Project", icon='ALIGN_LEFT')
-        row0.enabled = not context.scene.Blender2React.Initialized
+        row_init = layout.row(align=True)
+        row_init.scale_y = 1.2 if context.scene.Blender2React.R3F_Initialized else 2
+        row_init.operator("Blender2React.create_r3f_project",
+                          text="Create R3F Project" if not context.scene.Blender2React.R3F_Initialized else "Project Created")
+        row_init.enabled = not context.scene.Blender2React.R3F_Initialized
 
         # OPEN IN VS CODE AND OPEN IN EXPLORER OPERATORS
-        row2 = layout.row(align=False)
-        row2.operator("Blender2React.open_project_in_vscode", text="Open in VS Code")
-        row2.operator("Blender2React.open_project_folder", text="Open in Explorer")
-        row2.enabled = context.scene.Blender2React.Initialized
+        row_open = layout.row(align=False)
+        row_open.operator("Blender2React.open_project_in_vscode")
+        row_open.operator("Blender2React.open_project_folder")
+        row_open.enabled = context.scene.Blender2React.R3F_Initialized
 
-        # START DEV SERVER OPERATOR
-        row1 = layout.row(align=True)
-        row1.operator("Blender2React.start_dev_server", text="Start Dev Server")
-        row1.enabled = context.scene.Blender2React.Initialized
+        # START DEV SERVER OPERATOR AND GIT INIT
+        row_dev = layout.row(align=False)
+        row_dev.operator("Blender2React.start_dev_server")
+        row_dev.operator("Blender2React.reset_git")
+        row_dev.enabled = context.scene.Blender2React.R3F_Initialized
+
+        # RESET OPERATOR
+        row3 = layout.row(align=True)
+        row3.operator("Blender2React.delete_r3f_project", text="Delete Project")
+        row3.enabled = context.scene.Blender2React.R3F_Initialized
 
 
 class B2REACT_PT_Utils_Panel(bpy.types.Panel):
