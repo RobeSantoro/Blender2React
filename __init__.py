@@ -1,14 +1,15 @@
 import bpy
 
+# Globals
 from . B2REACT_Globals import B2REACT_Globals
 
-# # User Interface
+# Panels UI
 from . B2REACT_UI import B2REACT_PT_Init_Panel
 # from . B2REACT_UI import B2REACT_PT_Edit_Panel
 # from . B2REACT_UI import B2REACT_PT_Utils_Panel
 from . B2REACT_UI import B2REACT_PT_Export_Panel
 
-# Initialization
+# Initialization Operators
 from . init.create_r3f_project import B2REACT_OT_Create_R3F_Project
 from . init.reset_git import B2REACT_OT_Reset_Git
 from . init.open_vscode import B2REACT_OT_Open_Project_in_VSCode
@@ -18,12 +19,12 @@ from . init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
 
 from . init.update_title import B2REACT_OT_Update_Title
 
-# # Utilities
+# Utilities
 # from . utils.pushdown_actions import B2REACT_OT_PushDownActons
 # from . utils.rename_tracks import R3F_OT_RenameTracks
 # from . utils.rename_geo import R3F_OT_RenameGeo
 
-# # Export
+# Export
 # from . export.export_all_glb import R3F_OT_ExportAll_GLB
 from . export.export_active_glb import B2REACT_OT_Export_Active_GLB
 
@@ -75,7 +76,7 @@ def unregister():
     bpy.utils.unregister_class(B2REACT_PT_Init_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Edit_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Utils_Panel)
-    # bpy.utils.unregister_class(B2REACT_PT_Export_Panel)
+    bpy.utils.unregister_class(B2REACT_PT_Export_Panel)
 
     # Unregister Init Operators
     bpy.utils.unregister_class(B2REACT_OT_Create_R3F_Project)

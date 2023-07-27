@@ -1,6 +1,7 @@
 import os
-import bpy
+import re
 import subprocess
+import bpy
 
 from bpy_extras.io_utils import ExportHelper
 
@@ -25,20 +26,20 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
     )
 
     def invoke(self, context, event):
+        print("_____________________________________________________________")
         print("Exporting Active Collections as GLB file...")
 
-        if len(context.scene.view_layers) > 1:
-            print("WARNING: More than one ViewLayer found.")
-            self.report({'ERROR'}, "More than one ViewLayer found.")
-            return {'CANCELLED'}
-
-        if context.scene.Blender2React.R3F_Export_Path == "":
+        # Abort if no export path is set
+        if not context.scene.Blender2React.R3F_Export_Path:
             print("WARNING: No Export Path set.")
             self.report({'ERROR'}, "No Export Path set.")
             return {'CANCELLED'}
 
-        # Get the actual frame number and
-        # Move the timeline to the last frame
+        # Convert relative path to absolute path if //
+        if context.scene.Blender2React.R3F_Export_Path.startswith("//"):
+            context.scene.Blender2React.R3F_Export_Path = bpy.path.abspath(context.scene.Blender2React.R3F_Export_Path)
+
+        # Get the actual frame number and Move the timeline to the last frame
         # to avoid animation issues on scale
         current_frame = context.scene.frame_current
         context.scene.frame_set(context.scene.frame_end)
@@ -49,12 +50,6 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         # for LayerCollection in context.scene.view_layers[0].layer_collection.children:
         #     current_collection_status[LayerCollection.name] = LayerCollection.exclude
         # print("current_collection_status:", current_collection_status)
-
-        print()
-        print("-------------------------------------------------------------")
-        print("-------------- EXPORT ACTIVE COLLECTION AS GLB --------------")
-        print("-------------------------------------------------------------")
-        print()
 
         active_collection = context.view_layer.active_layer_collection
 
@@ -69,10 +64,17 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         #         LayerCollection.exclude = True
         #         print("collection:", LayerCollection.name, "exclude:", LayerCollection.exclude)
 
-        # Export the GLB file
-        filepath = os.path.join(context.scene.Blender2React.R3F_Export_Path, active_collection.name)
+        print()
+        print("-------------------------------------------------------------")
+        print("-------------- EXPORT ACTIVE COLLECTION AS GLB --------------")
+        print("-------------------------------------------------------------")
+        print()
 
+        filepath = os.path.join(context.scene.Blender2React.R3F_Export_Path, active_collection.name)
         print("filepath:", filepath)
+        print()
+
+        # Export the GLB file
         export_glb(filepath, active=True)
 
         # Launch gltfjsx command
@@ -100,20 +102,22 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         timeout_and_close_cmd = "&& timeout 10 && exit"
 
         cmd = glft_jsx_cmd + delete_original_glb_cmd + delete_created_jsx_cmd + timeout_and_close_cmd
-        # print("cmd:", glft_jsx_cmd)
+        cmd_clean = re.sub(' {2,}', ' ', cmd)
+        cmd_clean = cmd_clean.replace("&&", "&&\n")
+        cmd_clean = cmd_clean.replace(" --", "\n    --")
+        print(cmd_clean + "\n")
 
-        print("OPERATING SYSTEM", os.name)
-
+        # Change the directory to the export path to run gltfjsx
         # Check if is windows or mac or linux
+        print("OPERATING SYSTEM", os.name)
         if os.name == 'nt':
-            # Change the directory to the export path to run gltfjsx
             os.chdir(context.scene.Blender2React.R3F_Export_Path)
             process = subprocess.Popen(["start", "cmd", "/k", f"{cmd}"], shell=True)
             process.wait()
         elif os.name == 'posix':
             process = subprocess.Popen(["/bin/bash", "-c", f"{cmd}"])
             process.wait()
-        
+
         print("collection:", active_collection.name, "exclude:", active_collection.exclude)
         print("-------------------------------------------------------------")
         print("                        EXPORT FINISHED                      ")
