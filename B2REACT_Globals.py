@@ -58,6 +58,23 @@ def get_project_title():
     return bpy.context.scene.Blender2React.R3F_Project_Title
 
 
+def get_export_path():
+    """ Get the export path from
+    bpy.context.scene.Blender2React.R3F_Export_Path.
+    If not set, it will be set to the path of the current file.
+    """
+
+    if bpy.context.scene.Blender2React.R3F_Export_Path == "":
+
+        bpy.context.window_manager.popup_menu(
+            lambda self, context:
+                self.layout.label(text="No Export Path set."),
+                title="No Export Path set!",
+                icon='ERROR')
+
+    return bpy.context.scene.Blender2React.R3F_Export_Path
+
+
 class B2REACT_Globals(bpy.types.PropertyGroup):
 
     Scene_Path: bpy.props.StringProperty(
