@@ -5,7 +5,8 @@ import bpy
 
 from bpy_extras.io_utils import ExportHelper
 
-from .export_glb import export_glb
+from . export_glb import export_glb
+from .. B2REACT_Globals import get_project_root, get_project_name
 
 
 class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
@@ -24,6 +25,10 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         default="*.glb",
         options={'HIDDEN'},
     )
+
+    @classmethod
+    def poll(cls, context):
+        return True
 
     def invoke(self, context, event):
         print("_____________________________________________________________")
@@ -70,6 +75,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         print("-------------------------------------------------------------")
         print()
 
+        # Set the filepath from the export path and the collection name
         filepath = os.path.join(context.scene.Blender2React.R3F_Export_Path, active_collection.name)
         print("filepath:", filepath)
         print()
@@ -80,7 +86,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         # Launch gltfjsx command
         glft_jsx_cmd = f"cd {context.scene.Blender2React.R3F_Export_Path}\
                 && npx gltfjsx {filepath}.glb\
-                --output {context.scene.Blender2React.R3F_Export_Path}{active_collection.name}.glb\
+                --output {filepath}.glb\
                 --keepnames\
                 --keepgroups\
                 --instance\
@@ -91,11 +97,11 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
                 --debug "
 
         # Delete the original GLB file
-        delete_original_glb_cmd = f" && del {context.scene.Blender2React.R3F_Export_Path}{active_collection.name}.glb"\
+        delete_original_glb_cmd = f" && del {context.scene.Blender2React.R3F_Export_Path}{active_collection.name}.glb "\
             if not context.scene.Blender2React.R3F_Keep_Original_GLB else ''
 
         # Delete the JSX file created by gltfjsx
-        delete_created_jsx_cmd = f" && del {context.scene.Blender2React.R3F_Export_Path}{active_collection.name.capitalize()}.jsx"\
+        delete_created_jsx_cmd = f" && del {context.scene.Blender2React.R3F_Export_Path}{active_collection.name.capitalize()}.jsx "\
             if not context.scene.Blender2React.R3F_Create_JSX_Component else ''
 
         # Close the cmd window after 10 seconds
@@ -112,8 +118,8 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         print("OPERATING SYSTEM", os.name)
         if os.name == 'nt':
             os.chdir(context.scene.Blender2React.R3F_Export_Path)
-            process = subprocess.Popen(["start", "cmd", "/k", f"{cmd}"], shell=True)
-            process.wait()
+            return_code  = subprocess.call(["start", "cmd", "/k", f"{cmd}"], shell=True)
+            # process.wait()
         elif os.name == 'posix':
             process = subprocess.Popen(["/bin/bash", "-c", f"{cmd}"])
             process.wait()
@@ -131,6 +137,19 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         # Restore the collection status
         # for LayerCollection in context.scene.view_layers[0].layer_collection.children:
         #     LayerCollection.exclude = current_collection_status[LayerCollection.name]
+
+        # Get R3F Project Root and Name from the UI
+        R3F_Project_Root = get_project_root()
+        R3F_Project_Name = get_project_name()
+
+        # Move the jsx to components folder
+        if return_code == 0:
+            # if context.scene.Blender2React.R3F_Create_JSX_Component:
+            jsx_path = os.path.join(context.scene.Blender2React.R3F_Export_Path, f"{active_collection.name.capitalize()}.jsx")
+            jsx_components_path = os.path.join(R3F_Project_Root, R3F_Project_Name, "src", "components")
+            print("jsx_path:", jsx_path)
+            print("jsx_components_path:", jsx_components_path)
+            os.rename(jsx_path, os.path.join(jsx_components_path, f"{active_collection.name.capitalize()}.jsx"))
 
         return {'RUNNING_MODAL'}
 
@@ -153,8 +172,11 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
 # --instanceall, -I   Instance every geometry (for cheaper re-use)
 #   --transform, -T     Transform the asset for the web (draco, prune, resize)
 #     --resolution, -R  Transform resolution for texture resizing (default: 1024)
+#     --keepmeshes, -j  Do not join compatible meshes
+#     --keepmaterials, -M Do not palette join materials
+#     --format, -f      Texture format (default: "webp")
 #     --simplify, -S    Transform simplification (default: false) (experimental!)
-#     --weld          Weld tolerance (default: 0.0001)
-#     --ratio         Simplifier ratio (default: 0.075)
-#     --error         Simplifier error threshold (default: 0.001)
-#   --debug, -D         Debug output
+#       --weld          Weld tolerance (default: 0.0001)
+#       --ratio         Simplifier ratio (default: 0.075)
+#       --error         Simplifier error threshold (default: 0.001)
+# --debug, -D         Debug output
