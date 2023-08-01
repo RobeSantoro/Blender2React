@@ -12,16 +12,17 @@ def create_r3f_project(R3F_Project_Root, R3F_Project_Name):
     print('-------------------------------------------------------')
     print('Executing command in path:', R3F_Project_Root, '\n')
 
-    cmd = f"echo Creating R3F Project in {R3F_Project_Root}...\
-            && echo. \
-            && cd {R3F_Project_Root}\
-            && git clone https://github.com/RobeSantoro/blender2react-template {R3F_Project_Name}\
-            && cd {R3F_Project_Name}\
-            && git remote rm origin\
-            && npm install\
-            && timeout 15\
-            && exit\
-            "
+    os.chdir(R3F_Project_Root)
+    cmd = f"echo Creating '{R3F_Project_Name}' R3F Project in '{R3F_Project_Root}'...\
+        && echo. \
+        && cd {R3F_Project_Root}\
+        && git clone https://github.com/RobeSantoro/blender2react-template {R3F_Project_Name}\
+        && cd {R3F_Project_Name}\
+        && git remote rm origin\
+        && npm install\
+        && timeout 15\
+        && exit\
+        "
 
     p = subprocess.Popen(["start", "cmd", "/k", f"{cmd}"], shell=True)
     p.wait()
@@ -53,6 +54,7 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
         # Check if the Blender Scene has been saved
         Scene_Path = get_scene_path()
         if Scene_Path is None:
+            self.report({"ERROR"}, "Please save the Blender Scene before creating a R3F Project")
             return {"CANCELLED"}
 
         # Get R3F Project Root and Name from the UI
@@ -79,7 +81,7 @@ class B2REACT_OT_Create_R3F_Project(bpy.types.Operator):
 
     def invoke(self, context, event):
         return context.window_manager.invoke_props_dialog(self)
-    
+
     def draw(self, context):
         row = self.layout
         row.prop(context.scene.Blender2React, "R3F_Project_Root", text="Project Root")
