@@ -6,7 +6,7 @@ from . B2REACT_Globals import B2REACT_Globals
 # Panels UI
 from . B2REACT_UI import B2REACT_PT_Init_Panel
 # from . B2REACT_UI import B2REACT_PT_Edit_Panel
-# from . B2REACT_UI import B2REACT_PT_Utils_Panel
+from . B2REACT_UI import B2REACT_PT_Utils_Panel
 from . B2REACT_UI import B2REACT_PT_Export_Panel
 
 # Initialization Operators
@@ -20,9 +20,9 @@ from . init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
 from . init.update_title import B2REACT_OT_Update_Title
 
 # Utilities
-# from . utils.pushdown_actions import B2REACT_OT_PushDownActons
-# from . utils.rename_tracks import R3F_OT_RenameTracks
-# from . utils.rename_geo import R3F_OT_RenameGeo
+from . utils.pushdown_actions import B2REACT_OT_Push_Down_Actions
+from . utils.rename_tracks import B2REACT_OT_RenameTracks
+from . utils.rename_geo import B2REACT_OT_RenameGeo
 
 # Export
 # from . export.export_all_glb import R3F_OT_ExportAll_GLB
@@ -49,7 +49,7 @@ def register():
     # Register Panels UI
     bpy.utils.register_class(B2REACT_PT_Init_Panel)
     # bpy.utils.register_class(B2REACT_PT_Edit_Panel)
-    # bpy.utils.register_class(B2REACT_PT_Utils_Panel)
+    bpy.utils.register_class(B2REACT_PT_Utils_Panel)
     bpy.utils.register_class(B2REACT_PT_Export_Panel)
 
     # Register Init Operators
@@ -62,9 +62,10 @@ def register():
 
     bpy.utils.register_class(B2REACT_OT_Update_Title)
 
-    # bpy.utils.register_class(B2REACT_OT_PushDownActons)
-    # bpy.utils.register_class(R3F_OT_RenameTracks)
-    # bpy.utils.register_class(R3F_OT_RenameGeo)
+    # Register Utilities
+    bpy.utils.register_class(B2REACT_OT_Push_Down_Actions)
+    bpy.utils.register_class(B2REACT_OT_RenameTracks)
+    bpy.utils.register_class(B2REACT_OT_RenameGeo)
 
     # bpy.utils.register_class(R3F_OT_ExportAll_GLB)
     bpy.utils.register_class(B2REACT_OT_Export_Active_GLB)
@@ -75,7 +76,7 @@ def unregister():
     # Unregister Panels UI
     bpy.utils.unregister_class(B2REACT_PT_Init_Panel)
     # bpy.utils.unregister_class(B2REACT_PT_Edit_Panel)
-    # bpy.utils.unregister_class(B2REACT_PT_Utils_Panel)
+    bpy.utils.unregister_class(B2REACT_PT_Utils_Panel)
     bpy.utils.unregister_class(B2REACT_PT_Export_Panel)
 
     # Unregister Init Operators
@@ -88,9 +89,10 @@ def unregister():
 
     bpy.utils.unregister_class(B2REACT_OT_Update_Title)
 
-    # bpy.utils.unregister_class(B2REACT_OT_PushDownActons)
-    # bpy.utils.unregister_class(R3F_OT_RenameTracks)
-    # bpy.utils.unregister_class(R3F_OT_RenameGeo)
+    # Unregister Utilities
+    bpy.utils.unregister_class(B2REACT_OT_Push_Down_Actions)
+    bpy.utils.unregister_class(B2REACT_OT_RenameTracks)
+    bpy.utils.unregister_class(B2REACT_OT_RenameGeo)
 
     # bpy.utils.unregister_class(R3F_OT_ExportAll_GLB)
     bpy.utils.unregister_class(B2REACT_OT_Export_Active_GLB)

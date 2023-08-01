@@ -75,16 +75,9 @@ class B2REACT_PT_Utils_Panel(bpy.types.Panel):
         layout = self.layout
 
         col1 = layout.column(align=True)
-        # col1.label(text="Push Down Actions", icon='ACTION')
-        col1.operator("Blender2React.pushdown_actions", text="Push Down Selected", icon='ACTION')
-
-        col2 = layout.column(align=True)
-        # col1.label(text="Push Down Actions", icon='ACTION')
-        col2.operator("Blender2React.rename_tracks", text="Rename Tracks ", icon='ACTION_TWEAK')
-
-        col3 = layout.column(align=True)
-        # col1.label(text="Rename Geometry", icon='MESH_DATA')
-        col3.operator("Blender2React.rename_geo", text="Rename Geometry", icon='MESH_DATA')
+        col1.operator("blender2react.push_down_actions", text="Push Down Selected", icon='ACTION')
+        col1.operator("blender2react.rename_tracks", text="Rename Tracks ", icon='ACTION_TWEAK')
+        col1.operator("blender2react.rename_geo", text="Rename Geometry", icon='MESH_DATA')
 
 
 class B2REACT_PT_Export_Panel(bpy.types.Panel):
