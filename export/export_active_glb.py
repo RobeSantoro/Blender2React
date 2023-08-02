@@ -40,6 +40,13 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
             self.report({'ERROR'}, "No Export Path set.")
             return {'CANCELLED'}
 
+        if (context.view_layer.active_layer_collection is None
+                or context.view_layer.active_layer_collection.name == "Scene Collection"
+                ):
+            print("WARNING: No Active Collection selected.")
+            self.report({'ERROR'}, "No Active Collection selected.")
+            return {'CANCELLED'}
+
         # Convert relative path to absolute path if //
         if context.scene.Blender2React.R3F_Export_Path.startswith("//"):
             context.scene.Blender2React.R3F_Export_Path = bpy.path.abspath(context.scene.Blender2React.R3F_Export_Path)
@@ -145,53 +152,63 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         if context.scene.Blender2React.R3F_Create_JSX_Component:
 
             # Move the jsx to components folder
-            os.rename(
-                f"{filepath}.jsx",
-                f"{output_path}.jsx"
-            )
+            try:
+                os.rename(
+                    f"{filepath}.jsx",
+                    f"{output_path}.jsx"
+                )
+            except FileExistsError as err:
+                print("File already exists.")
+                self.report({'ERROR'}, "File already exists.")
+                bpy.context.window_manager.popup_menu(
+                    lambda self, context:
+                        self.layout.label(text=str(err)),
+                    title="Error moving some files.",
+                    icon='ERROR')
+                return {'CANCELLED'}
 
             # Open the jsx file and modify component name and path
-            with open(f"{output_path}.jsx", 'r') as jsx_file:
+            # with open(f"{output_path}.jsx", 'r') as jsx_file:
 
-                jsx_file_data = jsx_file.read()
+            #     jsx_file_data = jsx_file.read()
 
-                # ...replace the string 'export function Model' with 'export default function collection.name'
-                jsx_file_data = jsx_file_data.replace(
-                    "export function Model",
-                    f'export default function {active_collection.name.capitalize()}'
-                )
+            #     # ...replace the string 'export function Model' with 'export default function collection.name'
+            #     jsx_file_data = jsx_file_data.replace(
+            #         "export function Model",
+            #         f'export default function {active_collection.name.capitalize()}'
+            #     )
 
-                # ...replace the string '/active_collection.name-transformed.glb' to '/export_folder/active_collection.name-transformed.glb'
-                jsx_file_data = jsx_file_data.replace(
-                    f'/{active_collection.name}-transformed.glb',
-                    f'/{export_folder}/{active_collection.name}-transformed.glb'
-                )
+            #     # ...replace the string '/active_collection.name-transformed.glb' to '/export_folder/active_collection.name-transformed.glb'
+            #     jsx_file_data = jsx_file_data.replace(
+            #         f'/{active_collection.name}-transformed.glb',
+            #         f'/{export_folder}/{active_collection.name}-transformed.glb'
+            #     )
 
-            with open(f"{output_path}.jsx", 'w') as jsx_file:
-                jsx_file.write(jsx_file_data)
+            # with open(f"{output_path}.jsx", 'w') as jsx_file:
+            #     jsx_file.write(jsx_file_data)
 
-            # Add the import statement to the World.js file
-            with open(f"{components_path}World.jsx", 'r') as world_file:
+            # # Add the import statement to the World.js file
+            # with open(f"{components_path}World.jsx", 'r') as world_file:
 
-                world_file_data = world_file.read()
+            #     world_file_data = world_file.read()
 
-                # Add the import statement at the beginning of the World.js file
-                world_file.seek(0, 0)
-                world_file_data = f"import {active_collection.name.capitalize()} from './{active_collection.name.capitalize()}.jsx';\n" + world_file_data
+            #     # Add the import statement at the beginning of the World.js file
+            #     world_file.seek(0, 0)
+            #     world_file_data = f"import {active_collection.name.capitalize()} from './{active_collection.name.capitalize()}.jsx';\n" + world_file_data
 
-            # Write the new World.js file
-            with open(f"{components_path}World.jsx", 'w') as world_file:
-                world_file.write(world_file_data)
+            # # Write the new World.js file
+            # with open(f"{components_path}World.jsx", 'w') as world_file:
+            #     world_file.write(world_file_data)
 
-            # Add the component to the scene inside the fragment tag
-            pattern = r"<>\n(.*?)</>"
-            match = re.search(pattern, world_file_data, re.DOTALL)
+            # # Add the component to the scene inside the fragment tag
+            # pattern = r"<>\n(.*?)</>"
+            # match = re.search(pattern, world_file_data, re.DOTALL)
 
-            if match:
-                fragment = match.group()
-                print(fragment)
-                with open(f"{components_path}World.jsx", 'w') as world_file:
-                    world_file.write(world_file_data.replace(fragment, f"<>\n<{active_collection.name.capitalize()} />\n</>"))
+            # if match:
+            #     fragment = match.group()
+            #     print(fragment)
+            #     with open(f"{components_path}World.jsx", 'w') as world_file:
+            #         world_file.write(world_file_data.replace(fragment, f"<>\n<{active_collection.name.capitalize()} />\n</>"))
 
         return {'RUNNING_MODAL'}
 
