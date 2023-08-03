@@ -22,7 +22,7 @@ from . init.update_title import B2REACT_OT_Update_Title
 # Utilities
 from . utils.pushdown_actions import B2REACT_OT_Push_Down_Actions
 from . utils.rename_tracks import B2REACT_OT_RenameTracks
-from . utils.rename_geo import B2REACT_OT_RenameGeo
+from .utils.rename_object import B2REACT_OT_RenameObject
 
 # Export
 # from . export.export_all_glb import R3F_OT_ExportAll_GLB
@@ -65,7 +65,7 @@ def register():
     # Register Utilities
     bpy.utils.register_class(B2REACT_OT_Push_Down_Actions)
     bpy.utils.register_class(B2REACT_OT_RenameTracks)
-    bpy.utils.register_class(B2REACT_OT_RenameGeo)
+    bpy.utils.register_class(B2REACT_OT_RenameObject)
 
     # bpy.utils.register_class(R3F_OT_ExportAll_GLB)
     bpy.utils.register_class(B2REACT_OT_Export_Active_GLB)
@@ -92,7 +92,7 @@ def unregister():
     # Unregister Utilities
     bpy.utils.unregister_class(B2REACT_OT_Push_Down_Actions)
     bpy.utils.unregister_class(B2REACT_OT_RenameTracks)
-    bpy.utils.unregister_class(B2REACT_OT_RenameGeo)
+    bpy.utils.unregister_class(B2REACT_OT_RenameObject)
 
     # bpy.utils.unregister_class(R3F_OT_ExportAll_GLB)
     bpy.utils.unregister_class(B2REACT_OT_Export_Active_GLB)
