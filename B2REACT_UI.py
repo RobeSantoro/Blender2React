@@ -74,12 +74,14 @@ class B2REACT_PT_Utils_Panel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
 
+        col2 = layout.column(align=True)
+        col2.operator("blender2react.rename_object", text="Rename Object", icon='MESH_DATA')
+
+        col2.separator()
+
         col1 = layout.column(align=True)
         col1.operator("blender2react.push_down_actions", text="Push Down Selected", icon='ACTION')
         col1.operator("blender2react.rename_tracks", text="Rename Tracks ", icon='ACTION_TWEAK')
-
-        col2 = layout.column(align=True)
-        col2.operator("blender2react.rename_object", text="Rename Object", icon='MESH_DATA')
 
 
 class B2REACT_PT_Export_Panel(bpy.types.Panel):
@@ -100,9 +102,24 @@ class B2REACT_PT_Export_Panel(bpy.types.Panel):
         col3 = layout.column(align=True, heading="R3F_Export_Path")
         col3.prop(context.scene.Blender2React, "R3F_Export_Path", text="")
 
+        col2 = layout.column(align=True, heading="gltf2jsx export options")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_types", text="Add Typescript Types")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_keepnames", text="Keep Names")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_keepgroups", text="Keep Groups")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_shadows", text="Shadows")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_printwidth", text="Print Width")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_precision", text="Precision")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_instance", text="Instance")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_transform", text="Transform(Optimize)")
+        col2.prop(context.scene.Blender2React, "R3F_JSX_debug", text="Debug")
+
+        col2.separator()
+
         col1 = layout.column(align=True, heading="")
-        col1.prop(context.scene.Blender2React, "R3F_Keep_Original_GLB", text="Keep Original GLB")
-        col1.prop(context.scene.Blender2React, "R3F_Create_JSX_Component", text="Create JSX Component")
+        col1.prop(context.scene.Blender2React, "R3F_Delete_Original_GLB", text="Delete Original GLB")
+        col1.prop(context.scene.Blender2React, "R3F_Delete_JSX_Component", text="Delete JSX Component")
+
+
 
         row1 = layout.row(align=True)
         row1.operator("Blender2React.exportall_glb", text="Export All Collections")

@@ -128,14 +128,76 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         subtype='DIR_PATH',
     )
 
-    R3F_Keep_Original_GLB: bpy.props.BoolProperty(
-        name="Keep_Original_GLB",
-        description="Keep the original GLB file after exporting",
+    #############################
+    # GLTF 2 JSX EXPORT OPTIONS #
+    #############################
+
+    R3F_JSX_types: bpy.props.BoolProperty(
+        name="types",
+        description="Add types to the JSX Component",
         default=False,
     )
 
-    R3F_Create_JSX_Component: bpy.props.BoolProperty(
-        name="Create_JSX_Component",
-        description="Create a JSX Component for the exported GLB",
+    R3F_JSX_keepnames: bpy.props.BoolProperty(
+        name="JSX_keepnames",
+        description="Keep the original names of the objects in the JSX Component",
         default=True,
+    )
+
+    R3F_JSX_keepgroups: bpy.props.BoolProperty(
+        name="JSX_keepgroups",
+        description="Keep the original groups of the objects in the JSX Component",
+        default=True,
+    )
+
+    R3F_JSX_shadows: bpy.props.BoolProperty(
+        name="JSX_shadows",
+        description="Add cast nd receive shadows props to the JSX Component",
+        default=True,
+    )
+
+    R3F_JSX_printwidth: bpy.props.IntProperty(
+        name="printwidth",
+        description="Set the printwidth for the JSX Component",
+        default=120,
+    )
+
+    R3F_JSX_precision: bpy.props.IntProperty(
+        name="precision",
+        description="Set the precision for the JSX Component",
+        default=2,
+    )
+
+    R3F_JSX_instance: bpy.props.BoolProperty(
+        name="JSX_instance",
+        description="Use instances instead of copies in the JSX Component and GLB",
+        default=True,
+    )
+
+    R3F_JSX_transform: bpy.props.BoolProperty(
+        name="JSX_transform",
+        description="Optimize the asset for the web (draco, prune, resize)",
+        default=True,
+    )
+
+    R3F_JSX_debug: bpy.props.BoolProperty(
+        name="JSX_debug",
+        description="Debug the JSX Component",
+        default=True,
+    )
+
+    #############################@
+    # OPERATIONS AFTER EXPORTING #
+    #############################@
+
+    R3F_Delete_Original_GLB: bpy.props.BoolProperty(
+        name="Delete_Original_GLB",
+        description="Delete the original GLB after exporting",
+        default=True,
+    )
+
+    R3F_Delete_JSX_Component: bpy.props.BoolProperty(
+        name="Delete_JSX_Component",
+        description="Delete the JSX Component after exporting",
+        default=False,
     )

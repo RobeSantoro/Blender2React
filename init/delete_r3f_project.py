@@ -61,8 +61,8 @@ class B2REACT_OT_Delete_R3F_Project(bpy.types.Operator):
             context.scene.Blender2React.R3F_Project_Title = ""
             context.scene.Blender2React.R3F_Export_Name = ""
             context.scene.Blender2React.R3F_Export_Path = ""
-            context.scene.Blender2React.R3F_Keep_Original_GLB = False
-            context.scene.Blender2React.R3F_Create_JSX_Component = True
+            context.scene.Blender2React.R3F_Delete_Original_GLB = True
+            context.scene.Blender2React.R3F_Delete_JSX_Component = False
 
             print('Blender2React Add-on Set to default values')
             print('_______________________________________________________')

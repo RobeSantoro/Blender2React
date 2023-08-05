@@ -53,9 +53,9 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
 
         # Get the actual frame number and Move the timeline to the last frame
         # to avoid animation issues (scale = 0
-        current_frame = context.scene.frame_current
-        context.scene.frame_set(context.scene.frame_end)
-        context.view_layer.update()
+        # current_frame = context.scene.frame_current
+        # context.scene.frame_set(context.scene.frame_end)
+        # context.view_layer.update()
 
         print()
         print("-------------------------------------------------------------")
@@ -98,25 +98,28 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         glft_jsx_cmd = f"\
                 npx gltfjsx {filepath}.glb\
                 --output {output_path}.jsx\
-                --keepnames\
-                --keepgroups\
-                --instance\
-                --printwidth 80\
+                {'--types' if context.scene.Blender2React.R3F_JSX_types else ''}\
+                {'--keepnames' if context.scene.Blender2React.R3F_JSX_keepnames else ''}\
+                {'--keepgroups' if context.scene.Blender2React.R3F_JSX_keepgroups else ''}\
+                {'--shadows' if context.scene.Blender2React.R3F_JSX_shadows else ''}\
+                {'--instance' if context.scene.Blender2React.R3F_JSX_instance else ''}\
+                --printwidth {context.scene.Blender2React.R3F_JSX_printwidth}\
+                --precision {context.scene.Blender2React.R3F_JSX_precision}\
                 --root {R3F_Export_Path}\
-                --transform\
-                --shadows\
-                --debug "
+                {'--transform' if context.scene.Blender2React.R3F_JSX_transform else ''}\
+                {'--debug' if context.scene.Blender2React.R3F_JSX_debug else ''}\
+                "
 
         # Delete the original GLB file
         delete_original_glb_cmd = f" && del {R3F_Export_Path}{active_collection.name}.glb "\
-            if not context.scene.Blender2React.R3F_Keep_Original_GLB else ''
+            if context.scene.Blender2React.R3F_Delete_Original_GLB else ''
 
         # Delete the JSX file created by gltfjsx
         delete_created_jsx_cmd = f" && del {R3F_Export_Path}{active_collection.name.capitalize()}.jsx "\
-            if not context.scene.Blender2React.R3F_Create_JSX_Component else ''
+            if context.scene.Blender2React.R3F_Delete_JSX_Component else ''
 
-        # Close the cmd window after 10 seconds && timeout 10
-        timeout_and_close_cmd = "&& exit"
+        # Close the cmd window after 10 seconds 
+        timeout_and_close_cmd = "&& timeout 5 && exit"
 
         cmd = glft_jsx_cmd + delete_original_glb_cmd + delete_created_jsx_cmd + timeout_and_close_cmd
         cmd_clean = re.sub(' {2,}', ' ', cmd)
@@ -139,17 +142,23 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
             process = subprocess.Popen(["/bin/bash", "-c", f"{cmd}"])
             process.wait()
 
-        print("collection:", active_collection.name, "exclude:", active_collection.exclude)
-        print("_____________________________________________________________")
+        # print("collection:", active_collection.name, "exclude:", active_collection.exclude)
+        print("-------------------------------------------------------------")
         print("                        EXPORT FINISHED                      ")
         print("_____________________________________________________________")
         print()
 
-        # Move the timeline back to the original frame
-        context.scene.frame_set(current_frame)
-        context.view_layer.update()
+        bpy.context.window_manager.popup_menu(
+            lambda self, context: self.layout.label(text="Export finished."),
+            title="Export finished.",
+            icon='INFO')
 
-        if context.scene.Blender2React.R3F_Create_JSX_Component:
+        # Move the timeline back to the original frame
+        # context.scene.frame_set(current_frame)
+        # context.view_layer.update()
+
+        # Move the jsx to components folder because gltfjsx does not use the output option correctly
+        if not context.scene.Blender2React.R3F_Delete_JSX_Component:
 
             # Move the jsx to components folder
             try:
@@ -159,56 +168,13 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
                 )
             except FileExistsError as err:
                 print("File already exists.")
-                self.report({'ERROR'}, "File already exists.")
+                self.report({'ERROR'}, "File already exists. Cannot move jsx file.")
                 bpy.context.window_manager.popup_menu(
                     lambda self, context:
                         self.layout.label(text=str(err)),
-                    title="Error moving some files.",
+                    title="File already exists. Cannot move jsx file.",
                     icon='ERROR')
                 return {'CANCELLED'}
-
-            # Open the jsx file and modify component name and path
-            # with open(f"{output_path}.jsx", 'r') as jsx_file:
-
-            #     jsx_file_data = jsx_file.read()
-
-            #     # ...replace the string 'export function Model' with 'export default function collection.name'
-            #     jsx_file_data = jsx_file_data.replace(
-            #         "export function Model",
-            #         f'export default function {active_collection.name.capitalize()}'
-            #     )
-
-            #     # ...replace the string '/active_collection.name-transformed.glb' to '/export_folder/active_collection.name-transformed.glb'
-            #     jsx_file_data = jsx_file_data.replace(
-            #         f'/{active_collection.name}-transformed.glb',
-            #         f'/{export_folder}/{active_collection.name}-transformed.glb'
-            #     )
-
-            # with open(f"{output_path}.jsx", 'w') as jsx_file:
-            #     jsx_file.write(jsx_file_data)
-
-            # # Add the import statement to the World.js file
-            # with open(f"{components_path}World.jsx", 'r') as world_file:
-
-            #     world_file_data = world_file.read()
-
-            #     # Add the import statement at the beginning of the World.js file
-            #     world_file.seek(0, 0)
-            #     world_file_data = f"import {active_collection.name.capitalize()} from './{active_collection.name.capitalize()}.jsx';\n" + world_file_data
-
-            # # Write the new World.js file
-            # with open(f"{components_path}World.jsx", 'w') as world_file:
-            #     world_file.write(world_file_data)
-
-            # # Add the component to the scene inside the fragment tag
-            # pattern = r"<>\n(.*?)</>"
-            # match = re.search(pattern, world_file_data, re.DOTALL)
-
-            # if match:
-            #     fragment = match.group()
-            #     print(fragment)
-            #     with open(f"{components_path}World.jsx", 'w') as world_file:
-            #         world_file.write(world_file_data.replace(fragment, f"<>\n<{active_collection.name.capitalize()} />\n</>"))
 
         return {'RUNNING_MODAL'}
 
@@ -217,25 +183,25 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
 # $ npx gltfjsx [Model.glb] [options]
 
 # Options
-#   --output, -o        Output file name/path
-# --types, -t         Add Typescript definitions
-#   --keepnames, -k     Keep original names
-#   --keepgroups, -K    Keep (empty) groups, disable pruning
+# +--output, -o        Output file name/path
+# +--types, -t         Add Typescript definitions
+# +--keepnames, -k     Keep original names
+# +--keepgroups, -K    Keep (empty) groups, disable pruning
 # --meta, -m          Include metadata (as userData)
-#   --shadows, s        Let meshes cast and receive shadows
-#   --printwidth, w     Prettier printWidth (default: 120)
-# --precision, -p     Number of fractional digits (default: 2)
+# +--shadows, s        Let meshes cast and receive shadows
+# +--printwidth, w     Prettier printWidth (default: 120)
+# +--precision, -p     Number of fractional digits (default: 2)
 # --draco, -d         Draco binary path
-#   --root, -r          Sets directory from which .gltf file is served
-#   --instance, -i      Instance re-occuring geometry
+# +--root, -r          Sets directory from which .gltf file is served
+# +--instance, -i      Instance re-occuring geometry
 # --instanceall, -I   Instance every geometry (for cheaper re-use)
-#   --transform, -T     Transform the asset for the web (draco, prune, resize)
-#     --resolution, -R  Transform resolution for texture resizing (default: 1024)
-#     --keepmeshes, -j  Do not join compatible meshes
-#     --keepmaterials, -M Do not palette join materials
-#     --format, -f      Texture format (default: "webp")
-#     --simplify, -S    Transform simplification (default: false) (experimental!)
-#       --weld          Weld tolerance (default: 0.0001)
-#       --ratio         Simplifier ratio (default: 0.075)
-#       --error         Simplifier error threshold (default: 0.001)
-# --debug, -D         Debug output
+# +--transform, -T     Transform the asset for the web (draco, prune, resize)
+#   --resolution, -R  Transform resolution for texture resizing (default: 1024)
+#   --keepmeshes, -j  Do not join compatible meshes
+#   --keepmaterials, -M Do not palette join materials
+#   --format, -f      Texture format (default: "webp")
+#   --simplify, -S    Transform simplification (default: false) (experimental!)
+#     --weld          Weld tolerance (default: 0.0001)
+#     --ratio         Simplifier ratio (default: 0.075)
+#     --error         Simplifier error threshold (default: 0.001)
+# +--debug, -D         Debug output
