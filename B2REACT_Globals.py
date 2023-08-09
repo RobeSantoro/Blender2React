@@ -85,6 +85,12 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         subtype='DIR_PATH',
     )
 
+    R3F_Initialized: bpy.props.BoolProperty(
+        name="R3F_Initialized",
+        description="Is the R3F Project Initialized",
+        default=False,
+    )
+
     R3F_Project_Root: bpy.props.StringProperty(
         name="R3F_Project_Root",
         description="Root of the R3F Project",
@@ -98,12 +104,6 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         description="Name of the R3F Project",
         default="",
         maxlen=1024,
-    )
-
-    R3F_Initialized: bpy.props.BoolProperty(
-        name="R3F_Initialized",
-        description="Is the R3F Project Initialized",
-        default=False,
     )
 
     R3F_Project_Title: bpy.props.StringProperty(
@@ -133,7 +133,7 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
     #############################
 
     R3F_JSX_types: bpy.props.BoolProperty(
-        name="types",
+        name="JSX_types",
         description="Add types to the JSX Component",
         default=False,
     )
