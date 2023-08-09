@@ -110,10 +110,10 @@ class B2REACT_PT_Export_Panel(bpy.types.Panel):
         col2.prop(context.scene.Blender2React, "R3F_JSX_printwidth", text="Print Width")
         col2.prop(context.scene.Blender2React, "R3F_JSX_precision", text="Precision")
         col2.prop(context.scene.Blender2React, "R3F_JSX_instance", text="Instance")
-        col2.prop(context.scene.Blender2React, "R3F_JSX_transform", text="Transform(Optimize)")
         col2.prop(context.scene.Blender2React, "R3F_JSX_debug", text="Debug")
 
         col2.separator()
+        col2.prop(context.scene.Blender2React, "R3F_JSX_transform", text="Transform(Optimize)")
 
         col1 = layout.column(align=True, heading="")
         col1.prop(context.scene.Blender2React, "R3F_Delete_Original_GLB", text="Delete Original GLB")

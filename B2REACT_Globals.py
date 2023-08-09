@@ -75,6 +75,10 @@ def get_export_path():
     return bpy.context.scene.Blender2React.R3F_Export_Path
 
 
+def check_transform(self, context):
+    if not bpy.context.scene.Blender2React.R3F_JSX_transform:
+        bpy.context.scene.Blender2React.R3F_Delete_Original_GLB = False
+
 class B2REACT_Globals(bpy.types.PropertyGroup):
 
     Scene_Path: bpy.props.StringProperty(
@@ -174,21 +178,23 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         default=True,
     )
 
-    R3F_JSX_transform: bpy.props.BoolProperty(
-        name="JSX_transform",
-        description="Optimize the asset for the web (draco, prune, resize)",
-        default=True,
-    )
-
     R3F_JSX_debug: bpy.props.BoolProperty(
         name="JSX_debug",
         description="Debug the JSX Component",
         default=True,
     )
 
+    R3F_JSX_transform: bpy.props.BoolProperty(
+        name="JSX_transform",
+        description="Optimize the asset for the web (draco, prune, resize)",
+        default=True,
+        update=check_transform
+    )
+
     #############################@
     # OPERATIONS AFTER EXPORTING #
     #############################@
+    
 
     R3F_Delete_Original_GLB: bpy.props.BoolProperty(
         name="Delete_Original_GLB",
