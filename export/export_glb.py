@@ -1,7 +1,7 @@
 import bpy
 
 
-def export_glb(filepath, active=True):
+def export_glb(filepath, active_collection=True):
 
     # Export the GLB file
     bpy.ops.export_scene.gltf(
@@ -13,7 +13,7 @@ def export_glb(filepath, active=True):
         use_selection=False,
         use_visible=False,
         use_renderable=False,
-        use_active_collection=active,  # DOES NOT WORK ???
+        use_active_collection=active_collection,  # DOES NOT WORK ???
         use_active_collection_with_nested=True,
         use_active_scene=False,
 

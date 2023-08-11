@@ -49,7 +49,9 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
 
         # Convert relative path to absolute path if //
         if context.scene.Blender2React.R3F_Export_Path.startswith("//"):
-            context.scene.Blender2React.R3F_Export_Path = bpy.path.abspath(context.scene.Blender2React.R3F_Export_Path)
+            context.scene.Blender2React.R3F_Export_Path = (
+                bpy.path.abspath(context.scene.Blender2React.R3F_Export_Path)
+            )
 
         # Get the actual frame number and Move the timeline to the last frame
         # to avoid animation issues (scale = 0
@@ -75,11 +77,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
             "src\\",
             "components\\",
             active_collection.name.capitalize())
-        components_path = os.path.join(
-            R3F_Project_Root,
-            R3F_Project_Name,
-            "src\\",
-            "components\\")
+
         export_folder = os.path.basename(os.path.normpath(R3F_Export_Path))
 
         print("active_collection:", active_collection.name)
@@ -92,7 +90,12 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         print()
 
         # Export the GLB file
-        export_glb(filepath, active=True)
+        try:
+            export_glb(filepath, active_collection=True)
+        except:
+            print("WARNING: No GLB file found.")
+            self.report({'ERROR'}, "No GLB file found.")
+            return {'CANCELLED'}
 
         # Launch gltfjsx command cd {context.scene.Blender2React.R3F_Export_Path} &&\
         glft_jsx_cmd = f"\
@@ -110,18 +113,24 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
                 {'--debug' if context.scene.Blender2React.R3F_JSX_debug else ''}\
                 "
 
+        # Delete the JSX file created by gltfjsx
+        delete_created_jsx_cmd = f" && del {output_path}.jsx "\
+            if context.scene.Blender2React.R3F_Delete_JSX_Component else ''
+
         # Delete the original GLB file
         delete_original_glb_cmd = f" && del {R3F_Export_Path}{active_collection.name}.glb "\
             if context.scene.Blender2React.R3F_Delete_Original_GLB else ''
 
-        # Delete the JSX file created by gltfjsx
-        delete_created_jsx_cmd = f" && del {R3F_Export_Path}{active_collection.name.capitalize()}.jsx "\
-            if context.scene.Blender2React.R3F_Delete_JSX_Component else ''
-
         # Close the cmd window after 10 seconds 
-        timeout_and_close_cmd = "&& timeout 5 && exit"
+        timeout_and_close_cmd = "&& timeout 15 && exit"
 
-        cmd = glft_jsx_cmd + delete_original_glb_cmd + delete_created_jsx_cmd + timeout_and_close_cmd
+        cmd = (
+            glft_jsx_cmd + 
+            delete_original_glb_cmd + 
+            delete_created_jsx_cmd + 
+            timeout_and_close_cmd
+        )
+
         cmd_clean = re.sub(' {2,}', ' ', cmd)
         cmd_clean = cmd_clean.replace("&&", "&&\n")
         cmd_clean = cmd_clean.replace(" --", "\n    --")
@@ -142,7 +151,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
             process = subprocess.Popen(["/bin/bash", "-c", f"{cmd}"])
             process.wait()
 
-        # print("collection:", active_collection.name, "exclude:", active_collection.exclude)
+        print()
         print("-------------------------------------------------------------")
         print("                        EXPORT FINISHED                      ")
         print("_____________________________________________________________")
@@ -157,24 +166,49 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         # context.scene.frame_set(current_frame)
         # context.view_layer.update()
 
-        # Move the jsx to components folder because gltfjsx does not use the output option correctly
+        # Open the jsx file and modify component name and path
         if not context.scene.Blender2React.R3F_Delete_JSX_Component:
+            with open(f"{output_path}.jsx", 'r') as jsx_file:
 
-            # Move the jsx to components folder
-            try:
-                os.rename(
-                    f"{filepath}.jsx",
-                    f"{output_path}.jsx"
+                jsx_file_data = jsx_file.read()
+
+                # ...replace the string 'export function Model' 
+                # with 'export default function collection.name'
+                jsx_file_data = jsx_file_data.replace(
+                    "export function Model",
+                    f'export default function {active_collection.name.capitalize()}'
                 )
-            except FileExistsError as err:
-                print("File already exists.")
-                self.report({'ERROR'}, "File already exists. Cannot move jsx file.")
-                bpy.context.window_manager.popup_menu(
-                    lambda self, context:
-                        self.layout.label(text=str(err)),
-                    title="File already exists. Cannot move jsx file.",
-                    icon='ERROR')
-                return {'CANCELLED'}
+
+                # ...replace the string '/active_collection.name-transformed.glb' 
+                # to '/export_folder/active_collection.name-transformed.glb'
+                if export_folder != 'public':
+                    jsx_file_data = jsx_file_data.replace(
+                        f'/{active_collection.name}-transformed.glb',
+                        f'/{export_folder}/{active_collection.name}-transformed.glb'
+
+                )
+
+            with open(f"{output_path}.jsx", 'w') as jsx_file:
+                jsx_file.write(jsx_file_data)
+
+        # Move the jsx to components folder because gltfjsx does not use the output param correctly
+        # if not context.scene.Blender2React.R3F_Delete_JSX_Component:
+
+        #     # Move the jsx to components folder
+        #     try:
+        #         os.rename(
+        #             f"{filepath}.jsx",
+        #             f"{output_path}.jsx"
+        #         )
+        #     except FileExistsError as err:
+        #         print("File already exists.")
+        #         self.report({'ERROR'}, "File already exists. Cannot move jsx file.")
+        #         bpy.context.window_manager.popup_menu(
+        #             lambda self, context:
+        #                 self.layout.label(text=str(err)),
+        #             title="File already exists. Cannot move jsx file.",
+        #             icon='ERROR')
+        #         return {'CANCELLED'}
 
         return {'RUNNING_MODAL'}
 
