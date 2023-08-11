@@ -15,7 +15,11 @@ class B2REACT_PT_Init_Panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator_context = 'INVOKE_DEFAULT'
+        layout.operator_context = 'INVOKE_DEFAULT'  
+
+        col0 = layout.column(align=True)
+        col0.prop(context.scene.Blender2React, "R3F_Initialized", text="Initialized") 
+
 
         # NOT INITIALIZED - INIT
         if not bpy.context.scene.Blender2React.R3F_Initialized:
