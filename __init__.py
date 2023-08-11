@@ -16,6 +16,7 @@ from . init.open_vscode import B2REACT_OT_Open_Project_in_VSCode
 from . init.open_folder import B2REACT_OT_open_project_folder
 from . init.start_dev_server import B2REACT_OT_StartDevServer
 from . init.delete_r3f_project import B2REACT_OT_Delete_R3F_Project
+from . init.re_inizialize import B2REACT_OT_Re_Initialize
 
 from . init.update_title import B2REACT_OT_Update_Title
 
@@ -59,6 +60,7 @@ def register():
     bpy.utils.register_class(B2REACT_OT_open_project_folder)
     bpy.utils.register_class(B2REACT_OT_StartDevServer)
     bpy.utils.register_class(B2REACT_OT_Delete_R3F_Project)
+    bpy.utils.register_class(B2REACT_OT_Re_Initialize)
 
     bpy.utils.register_class(B2REACT_OT_Update_Title)
 
@@ -86,6 +88,7 @@ def unregister():
     bpy.utils.unregister_class(B2REACT_OT_open_project_folder)
     bpy.utils.unregister_class(B2REACT_OT_StartDevServer)
     bpy.utils.unregister_class(B2REACT_OT_Delete_R3F_Project)
+    bpy.utils.unregister_class(B2REACT_OT_Re_Initialize)
 
     bpy.utils.unregister_class(B2REACT_OT_Update_Title)
 

@@ -17,8 +17,9 @@ class B2REACT_PT_Init_Panel(bpy.types.Panel):
         layout = self.layout
         layout.operator_context = 'INVOKE_DEFAULT'  
 
-        col0 = layout.column(align=True)
-        col0.prop(context.scene.Blender2React, "R3F_Initialized", text="Initialized") 
+        row0 = layout.row(align=False)
+        row0.prop(context.scene.Blender2React, "R3F_Initialized", text="Initialized")
+        row0.operator("Blender2React.re_initialize", text="Re Init", icon='FILE_REFRESH')
 
 
         # NOT INITIALIZED - INIT
@@ -129,4 +130,4 @@ class B2REACT_PT_Export_Panel(bpy.types.Panel):
         row1.operator("Blender2React.exportall_glb", text="Export All Collections")
 
         row2 = layout.row(align=True)
-        row2.operator("Blender2React.export_active_glb", text="Export Active Collection")
+        row2.operator("Blender2React.export_active_glb", text=f"Export `{context.view_layer.active_layer_collection.name}` Collection")

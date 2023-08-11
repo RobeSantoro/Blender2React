@@ -29,7 +29,7 @@ class B2REACT_OT_Reset_Git(bpy.types.Operator):
         git_path = os.path.join(R3F_Project_Root, R3F_Project_Name, ".git")
 
         print('-------------------------------------------------------')
-        print('Deleting Template Git Folder:', git_path)
+        print('Deleting Actual Git Folder:', git_path)
 
         # If exists
         if os.path.exists(git_path):
@@ -56,5 +56,15 @@ class B2REACT_OT_Reset_Git(bpy.types.Operator):
 
             print("Git Initialized")
             print('-------------------------------------------------------')
+        else:
+            print('Git Folder not found')
+            bpy.context.window_manager.popup_menu(
+                lambda self, context:
+                    self.layout.label(text="Git Folder not found"),
+                    title="Git Folder not found",
+                    icon='ERROR')
 
         return {"FINISHED"}
+    
+    def invoke(self, context, event):
+        return context.window_manager.invoke_confirm(self, event)
