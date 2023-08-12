@@ -124,10 +124,9 @@ class B2REACT_PT_Export_Panel(bpy.types.Panel):
         col1.prop(context.scene.Blender2React, "R3F_Delete_Original_GLB", text="Delete Original GLB")
         col1.prop(context.scene.Blender2React, "R3F_Delete_JSX_Component", text="Delete JSX Component")
 
-
-
-        row1 = layout.row(align=True)
-        row1.operator("Blender2React.exportall_glb", text="Export All Collections")
-
         row2 = layout.row(align=True)
+        row2.scale_y = 2
         row2.operator("Blender2React.export_active_glb", text=f"Export `{context.view_layer.active_layer_collection.name}` Collection")
+
+        # row1 = layout.row(align=True)
+        # row1.operator("Blender2React.exportall_glb", text="Export All Collections")
