@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import subprocess
 import bpy
 
@@ -168,6 +169,13 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
 
         # Open the jsx file and modify component name and path
         if not context.scene.Blender2React.R3F_Delete_JSX_Component:
+
+            # On sone ssystem gltf2jsx fails to create the jsx file into the output_path
+            # so we need to check if the file exists before trying to open it
+            # and if not, we need to move it from the `filepath` to the `output_path`
+            if not os.path.exists(f"{output_path}.jsx"):
+                shutil.move(f"{filepath}.jsx", f"{output_path}.jsx")
+
             with open(f"{output_path}.jsx", 'r') as jsx_file:
 
                 jsx_file_data = jsx_file.read()
