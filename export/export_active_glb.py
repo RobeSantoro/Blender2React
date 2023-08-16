@@ -70,14 +70,16 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         active_collection = context.view_layer.active_layer_collection
         R3F_Project_Root = get_project_root()
         R3F_Project_Name = get_project_name()
-        R3F_Export_Path = get_export_path()
-        filepath = os.path.join(R3F_Export_Path, active_collection.name)
+        
         output_path = os.path.join(
             R3F_Project_Root,
             R3F_Project_Name,
             "src\\",
             "components\\",
             active_collection.name.capitalize())
+        
+        R3F_Export_Path = get_export_path()
+        filepath = os.path.join(R3F_Export_Path, active_collection.name)
 
         export_folder = os.path.basename(os.path.normpath(R3F_Export_Path))
 
@@ -89,6 +91,14 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         print("output_path:      ", output_path)
         print("export_folder:    ", export_folder)
         print()
+
+        # Check if the export path exists
+        # TODO ALl this kind of check should be done
+        # in the get functions in B2REACT_Globals.py
+        if not os.path.exists(R3F_Export_Path):
+            print("WARNING: R3F_Export_Path does not exist.")
+            self.report({'ERROR'}, "R3F_Export_Path does not exist.")
+            return {'CANCELLED'}
 
         # Export the GLB file
         try:
@@ -111,6 +121,10 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
                 --precision {context.scene.Blender2React.R3F_JSX_precision}\
                 --root {R3F_Export_Path}\
                 {'--transform' if context.scene.Blender2React.R3F_JSX_transform else ''}\
+                --resolution {context.scene.Blender2React.R3F_JSX_resolution}\
+                {'--keepmeshes' if context.scene.Blender2React.R3F_JSX_keepmeshes else ''}\
+                {'--keepmaterials' if context.scene.Blender2React.R3F_JSX_keepmaterials else ''}\
+                --format {context.scene.Blender2React.R3F_JSX_format}\
                 {'--debug' if context.scene.Blender2React.R3F_JSX_debug else ''}\
                 "
 
@@ -119,7 +133,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
             if context.scene.Blender2React.R3F_Delete_JSX_Component else ''
 
         # Delete the original GLB file
-        delete_original_glb_cmd = f" && del {R3F_Export_Path}{active_collection.name}.glb "\
+        delete_original_glb_cmd = f" && del {filepath}.glb "\
             if context.scene.Blender2React.R3F_Delete_Original_GLB else ''
 
         # Close the cmd window after 10 seconds 

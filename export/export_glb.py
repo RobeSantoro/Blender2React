@@ -18,8 +18,8 @@ def export_glb(filepath, active_collection=True):
         use_active_scene=False,
 
         export_extras=True,
-        export_cameras=False,
-        export_lights=False,
+        export_cameras=True,
+        export_lights=True,
 
         export_yup=True,
 

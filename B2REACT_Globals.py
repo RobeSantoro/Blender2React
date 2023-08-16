@@ -11,7 +11,8 @@ def get_scene_path():
 
         bpy.context.window_manager.popup_menu(
             lambda self, context:
-                self.layout.label(text="Scene Path not found. Save Blender file first."),
+                self.layout.label(
+                    text="Scene Path not found. Save Blender file first."),
                 title="Save Blender File first!",
                 icon='ERROR')
 
@@ -78,6 +79,9 @@ def get_export_path():
 def check_transform(self, context):
     if not bpy.context.scene.Blender2React.R3F_JSX_transform:
         bpy.context.scene.Blender2React.R3F_Delete_Original_GLB = False
+    else:
+        bpy.context.scene.Blender2React.R3F_Delete_Original_GLB = True
+
 
 class B2REACT_Globals(bpy.types.PropertyGroup):
 
@@ -191,10 +195,46 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         update=check_transform
     )
 
-    #############################@
+    R3F_JSX_resolution: bpy.props.EnumProperty(
+        name="JSX_resolution",
+        description="Set the resolution for texture resizing",
+        items=[
+            ("256", "256", "256"),
+            ("512", "512", "512"),
+            ("1024", "1024", "1024"),
+            ("2048", "2048", "2048"),
+            ("4096", "4096", "4096"),
+            ("8192", "8192", "8192")
+        ],
+        default="1024"
+    )
+
+    R3F_JSX_keepmeshes: bpy.props.BoolProperty(
+        name="JSX_keepmeshes",
+        description="Do not join compatible meshes",
+        default=True,
+    )
+
+    R3F_JSX_keepmaterials: bpy.props.BoolProperty(
+        name="JSX_keepmaterials",
+        description="Do not palette join materials",
+        default=True,
+    )
+
+    R3F_JSX_format: bpy.props.EnumProperty(
+        name="JSX_format",
+        description="Set the texture format",
+        items=[
+            ("webp", "webp", "webp"),
+            ("png", "png", "png"),
+            ("jpg", "jpg", "jpg"),
+            ("jpeg", "jpeg", "jpeg"),
+        ],
+        default="webp"
+    )
+    # @
     # OPERATIONS AFTER EXPORTING #
-    #############################@
-    
+    # @
 
     R3F_Delete_Original_GLB: bpy.props.BoolProperty(
         name="Delete_Original_GLB",
@@ -207,3 +247,30 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         description="Delete the JSX Component after exporting",
         default=False,
     )
+
+# Usage
+# $ npx gltfjsx [Model.glb] [options]
+
+# Options
+# +--output, -o        Output file name/path
+# +--types, -t         Add Typescript definitions
+# +--keepnames, -k     Keep original names
+# +--keepgroups, -K    Keep (empty) groups, disable pruning
+# --meta, -m          Include metadata (as userData)
+# +--shadows, s        Let meshes cast and receive shadows
+# +--printwidth, w     Prettier printWidth (default: 120)
+# +--precision, -p     Number of fractional digits (default: 2)
+# --draco, -d         Draco binary path
+# +--root, -r          Sets directory from which .gltf file is served
+# +--instance, -i      Instance re-occuring geometry
+# --instanceall, -I   Instance every geometry (for cheaper re-use)
+# +--transform, -T     Transform the asset for the web (draco, prune, resize)
+#   --resolution, -R  Transform resolution for texture resizing (default: 1024)
+#   --keepmeshes, -j  Do not join compatible meshes
+#   --keepmaterials, -M Do not palette join materials
+#   --format, -f      Texture format (default: "webp")
+#   --simplify, -S    Transform simplification (default: false) (experimental!)
+#     --weld          Weld tolerance (default: 0.0001)
+#     --ratio         Simplifier ratio (default: 0.075)
+#     --error         Simplifier error threshold (default: 0.001)
+# +--debug, -D         Debug output

@@ -8,6 +8,9 @@ from . B2REACT_UI import B2REACT_PT_Init_Panel
 # from . B2REACT_UI import B2REACT_PT_Edit_Panel
 from . B2REACT_UI import B2REACT_PT_Utils_Panel
 from . B2REACT_UI import B2REACT_PT_Export_Panel
+from . B2REACT_UI import B2REACT_PT_gltfjsx_Options
+from . B2REACT_UI import B2REACT_PT_Transform_Options
+from . B2REACT_UI import B2REACT_PT_ExportActions
 
 # Initialization Operators
 from . init.create_r3f_project import B2REACT_OT_Create_R3F_Project
@@ -52,6 +55,10 @@ def register():
     # bpy.utils.register_class(B2REACT_PT_Edit_Panel)
     bpy.utils.register_class(B2REACT_PT_Utils_Panel)
     bpy.utils.register_class(B2REACT_PT_Export_Panel)
+    bpy.utils.register_class(B2REACT_PT_gltfjsx_Options)
+    bpy.utils.register_class(B2REACT_PT_Transform_Options)
+    bpy.utils.register_class(B2REACT_PT_ExportActions)
+    
 
     # Register Init Operators
     bpy.utils.register_class(B2REACT_OT_Create_R3F_Project)
@@ -80,6 +87,9 @@ def unregister():
     # bpy.utils.unregister_class(B2REACT_PT_Edit_Panel)
     bpy.utils.unregister_class(B2REACT_PT_Utils_Panel)
     bpy.utils.unregister_class(B2REACT_PT_Export_Panel)
+    bpy.utils.unregister_class(B2REACT_PT_gltfjsx_Options)
+    bpy.utils.unregister_class(B2REACT_PT_Transform_Options)
+    bpy.utils.unregister_class(B2REACT_PT_ExportActions)
 
     # Unregister Init Operators
     bpy.utils.unregister_class(B2REACT_OT_Create_R3F_Project)
