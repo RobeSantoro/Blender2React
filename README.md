@@ -1,4 +1,4 @@
-# Blender 2 Drei
+# Blender 2 React
 
 This Blender Addon is a learning project. It started as an ambitious project to generate react-three-fiber and Drei components from a Blender scene, but it is still a messy work in progress.
 
