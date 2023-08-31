@@ -91,6 +91,11 @@ class B2REACT_PT_Utils_Panel(bpy.types.Panel, Blender2ReactPanel):
                       text="Push Down Selected", icon='ACTION')
         col1.operator("blender2react.rename_tracks",
                       text="Rename Tracks ", icon='ACTION_TWEAK')
+        
+        col1.separator()
+
+        col1.operator("blender2react.parent_to_empty",
+                        text="Parent to Empty", icon='EMPTY_DATA')
 
 
 class B2REACT_PT_Export_Panel(bpy.types.Panel, Blender2ReactPanel):

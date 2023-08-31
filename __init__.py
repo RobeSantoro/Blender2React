@@ -26,7 +26,8 @@ from . init.update_title import B2REACT_OT_Update_Title
 # Utilities
 from . utils.pushdown_actions import B2REACT_OT_Push_Down_Actions
 from . utils.rename_tracks import B2REACT_OT_RenameTracks
-from .utils.rename_object import B2REACT_OT_RenameObject
+from . utils.rename_object import B2REACT_OT_RenameObject
+from . utils.parent_to_empty import B2REACT_OT_ParentToEmpty
 
 # Export
 # from . export.export_all_glb import R3F_OT_ExportAll_GLB
@@ -75,6 +76,7 @@ def register():
     bpy.utils.register_class(B2REACT_OT_Push_Down_Actions)
     bpy.utils.register_class(B2REACT_OT_RenameTracks)
     bpy.utils.register_class(B2REACT_OT_RenameObject)
+    bpy.utils.register_class(B2REACT_OT_ParentToEmpty)
 
     # bpy.utils.register_class(R3F_OT_ExportAll_GLB)
     bpy.utils.register_class(B2REACT_OT_Export_Active_GLB)
@@ -106,6 +108,7 @@ def unregister():
     bpy.utils.unregister_class(B2REACT_OT_Push_Down_Actions)
     bpy.utils.unregister_class(B2REACT_OT_RenameTracks)
     bpy.utils.unregister_class(B2REACT_OT_RenameObject)
+    bpy.utils.unregister_class(B2REACT_OT_ParentToEmpty)
 
     # bpy.utils.unregister_class(R3F_OT_ExportAll_GLB)
     bpy.utils.unregister_class(B2REACT_OT_Export_Active_GLB)
