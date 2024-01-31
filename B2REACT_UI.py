@@ -124,8 +124,8 @@ class B2REACT_PT_gltfjsx_Options(bpy.types.Panel, Blender2ReactPanel):
         layout = self.layout
 
         col = layout.column(align=True)
-        col.prop(context.scene.Blender2React,
-                 "R3F_JSX_types", text="Add Typescript Types")
+        # col.prop(context.scene.Blender2React,
+        #          "R3F_JSX_typescript", text="Add Typescript Types")
         col.prop(context.scene.Blender2React,
                  "R3F_JSX_keepnames", text="Keep Names")
         col.prop(context.scene.Blender2React,

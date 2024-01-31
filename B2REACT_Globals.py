@@ -140,8 +140,8 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
     # GLTF 2 JSX EXPORT OPTIONS #
     #############################
 
-    R3F_JSX_types: bpy.props.BoolProperty(
-        name="JSX_types",
+    R3F_JSX_typescript: bpy.props.BoolProperty(
+        name="JSX_typescript",
         description="Add types to the JSX Component",
         default=False,
     )
@@ -165,13 +165,13 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
     )
 
     R3F_JSX_printwidth: bpy.props.IntProperty(
-        name="printwidth",
+        name="JSX_printwidth",
         description="Set the printwidth for the JSX Component",
         default=120,
     )
 
     R3F_JSX_precision: bpy.props.IntProperty(
-        name="precision",
+        name="JSX_precision",
         description="Set the precision for the JSX Component",
         default=2,
     )
@@ -232,8 +232,9 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         ],
         default="webp"
     )
+
     # @
-    # OPERATIONS AFTER EXPORTING #
+    # PROPS FOR OPERATIONS AFTER EXPORTING #
     # @
 
     R3F_Delete_Original_GLB: bpy.props.BoolProperty(
