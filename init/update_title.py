@@ -27,8 +27,9 @@ class B2REACT_OT_Update_Title(bpy.types.Operator):
 
         # Update Title tag in index.html
         project_location = os.path.join(R3F_Project_Root, R3F_Project_Name)
+        index_path = os.path.join(project_location, 'index.html')
 
-        with open(f'{project_location}\\index.html', 'r') as f:
+        with open(index_path, 'r') as f:
             html = f.read()
 
         pattern = r"<title>.*?</title>"
@@ -36,8 +37,17 @@ class B2REACT_OT_Update_Title(bpy.types.Operator):
 
         if match:
             title_tag = match.group()
+
+            with open(index_path, 'w') as f:
+                f.write(html.replace(
+                    title_tag,
+                    f"<title>{R3F_Project_Title}</title>")
+                )
+
+            print()
+            print(f"Title tag in index.html")
             print(title_tag)
-            with open(f'{project_location}\\index.html', 'w') as f:
-                f.write(html.replace(title_tag, f"<title>{R3F_Project_Title}</title>"))
+            print(f'updated to: {R3F_Project_Title}')
+            print()
 
         return {"FINISHED"}
