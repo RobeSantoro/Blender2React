@@ -176,12 +176,6 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
         default=2,
     )
 
-    R3F_JSX_instance: bpy.props.BoolProperty(
-        name="JSX_instance",
-        description="Use instances instead of copies in the JSX Component and GLB",
-        default=True,
-    )
-
     R3F_JSX_debug: bpy.props.BoolProperty(
         name="JSX_debug",
         description="Debug the JSX Component",
@@ -191,8 +185,14 @@ class B2REACT_Globals(bpy.types.PropertyGroup):
     R3F_JSX_transform: bpy.props.BoolProperty(
         name="JSX_transform",
         description="Optimize the asset for the web (draco, prune, resize)",
-        default=True,
+        default=False,
         update=check_transform
+    )
+
+    R3F_JSX_instance: bpy.props.BoolProperty(
+        name="JSX_instance",
+        description="Use instances instead of copies in the JSX Component and GLB",
+        default=True,
     )
 
     R3F_JSX_resolution: bpy.props.EnumProperty(

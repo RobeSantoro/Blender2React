@@ -137,8 +137,6 @@ class B2REACT_PT_gltfjsx_Options(bpy.types.Panel, Blender2ReactPanel):
         col.prop(context.scene.Blender2React,
                  "R3F_JSX_precision", text="Precision")
         col.prop(context.scene.Blender2React,
-                 "R3F_JSX_instance", text="Instance")
-        col.prop(context.scene.Blender2React,
                  "R3F_JSX_debug", text="Debug")
 
         col.prop(context.scene.Blender2React,
@@ -161,6 +159,9 @@ class B2REACT_PT_Transform_Options(bpy.types.Panel, Blender2ReactPanel):
             box.enabled = True
         else:
             box.enabled = False
+
+        box.prop(context.scene.Blender2React,
+            "R3F_JSX_instance", text="Instance")
 
         box.prop(context.scene.Blender2React,
                  "R3F_JSX_resolution", text="Resolution")
