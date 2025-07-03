@@ -32,7 +32,7 @@ def create_r3f_project(R3F_Project_Root="R3F_Project_Root",
     # Run cmd in a new terminal
     platform_system = platform.system()
     print('-------------------------------------------------------')
-    print('----------------Creating R3F Project...----------------')
+    print('--------------- Creating R3F Project... ---------------')
     print('-------------------------------------------------------')
     print()
     print('R3F_Project_Root:', R3F_Project_Root)
@@ -52,6 +52,8 @@ def create_r3f_project(R3F_Project_Root="R3F_Project_Root",
             print(e)
     elif platform_system == "Linux":
         pass
+
+    print('_______________________________________________________')
 
     return
 
