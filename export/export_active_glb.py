@@ -25,7 +25,7 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
     filter_glob: bpy.props.StringProperty(
         default="*.glb",
         options={'HIDDEN'},
-    )
+    ) # type: ignore
 
     @classmethod
     def poll(cls, context):
@@ -103,9 +103,9 @@ class B2REACT_OT_Export_Active_GLB(bpy.types.Operator, ExportHelper):
         # Export the GLB file
         try:
             export_glb(glb_filepath, active_collection=True)
-        except:
-            print("WARNING: No GLB file found.")
-            self.report({'ERROR'}, "No GLB file found.")
+        except Exception as e:
+            print(e)
+            self.report({'ERROR'}, str(e))
             return {'CANCELLED'}
 
         # Launch gltfjsx command cd {context.scene.Blender2React.R3F_Export_Path} &&\
