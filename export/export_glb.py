@@ -27,7 +27,7 @@ def export_glb(filepath, active_collection=True):
         export_texcoords=True,
         export_normals=True,
         export_tangents=False,
-        export_colors=False,
+        export_all_vertex_colors=False,
         use_mesh_edges=False,
         use_mesh_vertices=False,
 
